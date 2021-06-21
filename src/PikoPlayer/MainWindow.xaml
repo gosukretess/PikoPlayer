@@ -3,18 +3,24 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:tb="http://www.hardcodet.net/taskbar"
         xmlns:controls="clr-namespace:PikoPlayer.Controls"
-        Topmost="True" 
-        Background="{Binding ThemesRepository.ActiveTheme.BackgroundColor}" 
+        Topmost="True"
+        Background="{Binding ActiveTheme.BackgroundColor, Mode=TwoWay}"
         WindowStyle="None"
         AllowsTransparency="True"
         PreviewMouseWheel="Window_ScrollEvent"
         Title="PikoPlayer" Height="24" Width="96" MouseDown="Window_MoveEvent">
     <Window.Resources>
         <ContextMenu x:Key="MainContextMenu">
-            <!--<MenuItem Header="Themes">
-                <MenuItem Header="bluesky" Command="{Binding ThemeCommand}" />
-            </MenuItem>-->
-            <MenuItem Header="Close" Command="{Binding CloseCommand}"/>
+            <MenuItem Header="Themes" ItemsSource="{Binding ThemesList}">
+                <MenuItem.ItemContainerStyle>
+                    <Style TargetType="{x:Type MenuItem}">
+                        <Setter Property="Header" Value="{Binding Name}" />
+                        <Setter Property="Command" Value="{Binding ChangeThemeCommand}" />
+                        <Setter Property="IsChecked" Value="{Binding Checked}" />
+                    </Style>
+                </MenuItem.ItemContainerStyle>
+            </MenuItem>
+            <MenuItem Header="Close" Command="{Binding CloseCommand}" />
         </ContextMenu>
 
         <Style TargetType="Button" x:Key="PlaybackButton">
@@ -24,17 +30,17 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Button}">
                         <Border HorizontalAlignment="Center" VerticalAlignment="Center" Width="20" Height="20">
-                            <ContentPresenter x:Name="MyContentPresenter" 
+                            <ContentPresenter x:Name="MyContentPresenter"
                                               Content="{TemplateBinding Content}"
-                                              HorizontalAlignment="Center" 
+                                              HorizontalAlignment="Center"
                                               VerticalAlignment="Center" />
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="MyContentPresenter" Property="Opacity" Value="0.8"/>
+                                <Setter TargetName="MyContentPresenter" Property="Opacity" Value="0.8" />
                             </Trigger>
                             <Trigger Property="IsMouseOver" Value="False">
-                                <Setter TargetName="MyContentPresenter" Property="Opacity" Value="1"/>
+                                <Setter TargetName="MyContentPresenter" Property="Opacity" Value="1" />
                             </Trigger>
                             <Trigger Property="Button.IsPressed" Value="True">
                                 <Setter TargetName="MyContentPresenter" Property="Opacity" Value="0.5" />
@@ -48,22 +54,21 @@
     </Window.Resources>
     <StackPanel Orientation="Horizontal" Margin="2">
         <tb:TaskbarIcon x:Name="NotificationIcon" Visibility="Visible"
-                        IconSource="../Resources/Icons/taskbar.ico" ToolTipText="Pikoplayer" 
+                        IconSource="../Resources/Icons/taskbar.ico" ToolTipText="Pikoplayer"
                         ContextMenu="{StaticResource MainContextMenu}" />
-        <TextBlock Text="=" Foreground="{Binding ThemesRepository.ActiveTheme.ForegroundColor}"  Width="12" Height="20" 
-                   Margin="0,0,4,0" HorizontalAlignment="Left" ContextMenu="{StaticResource MainContextMenu}">
-        </TextBlock>
+        <TextBlock Text="=" Foreground="{Binding ActiveTheme.ForegroundColor}" Width="12" Height="20"
+                   Margin="0,0,4,0" HorizontalAlignment="Left" ContextMenu="{StaticResource MainContextMenu}" />
         <Button Command="{Binding ControlPlayback}" CommandParameter="{x:Static controls:ControlAction.Prev}"
                 Style="{StaticResource PlaybackButton}">
-            <Image Source="{Binding ThemesRepository.ActiveTheme.Prev}"/>
+            <Image Source="{Binding ActiveTheme.Prev}" />
         </Button>
         <Button Command="{Binding ControlPlayback}" CommandParameter="{x:Static controls:ControlAction.Play}"
-                Style="{StaticResource PlaybackButton}" Margin="8,0,8,0" >
-            <Image Source="{Binding ThemesRepository.ActiveTheme.Play}"/>
+                Style="{StaticResource PlaybackButton}" Margin="8,0,8,0">
+            <Image Source="{Binding ActiveTheme.Play}" />
         </Button>
         <Button Command="{Binding ControlPlayback}" CommandParameter="{x:Static controls:ControlAction.Next}"
                 Style="{StaticResource PlaybackButton}">
-            <Image Source="{Binding ThemesRepository.ActiveTheme.Next}"/>
+            <Image Source="{Binding ActiveTheme.Next}" />
         </Button>
     </StackPanel>
 </Window>

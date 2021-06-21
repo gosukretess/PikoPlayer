@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json;
+using Microsoft.Extensions.Configuration;
 
 namespace PikoPlayer.Themes
 {
@@ -12,7 +13,7 @@ namespace PikoPlayer.Themes
         private readonly IDictionary<string, Theme> _themes = new Dictionary<string, Theme>();
         public Theme ActiveTheme { get; set; }
 
-        public ThemesRepository(string activeTheme)
+        public ThemesRepository()
         {
             var themesDirectory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Resources", "Themes");
             foreach (var themePath in Directory.GetDirectories(themesDirectory))
@@ -24,11 +25,9 @@ namespace PikoPlayer.Themes
                 theme.Path = themePath;
                 _themes.Add(themeName, theme);
             }
-
-            ActiveTheme = GetThemeByName(activeTheme);
         }
 
-        private Theme GetThemeByName(string name)
+        public Theme GetThemeByName(string name)
         {
             return _themes.FirstOrDefault(t => t.Key == name).Value;
         }
@@ -41,6 +40,6 @@ namespace PikoPlayer.Themes
     public interface IThemesRepository
     {
         IEnumerable<string> GetThemesList();
-        Theme ActiveTheme { get; set; }
+        Theme GetThemeByName(string name);
     }
 }

@@ -18,7 +18,7 @@ namespace PikoPlayer
         {
             Configuration = BuildConfiguration();
             ServiceProvider = ConfigureServices();
-
+            
             var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
             mainWindow.Show();
         }
@@ -36,7 +36,8 @@ namespace PikoPlayer
         {
             var services = new ServiceCollection();
 
-            services.AddSingleton<IThemesRepository>(new ThemesRepository(Configuration["Theme"]));
+            services.AddSingleton(Configuration);
+            services.AddSingleton<IThemesRepository, ThemesRepository>();
 
             services.AddTransient<MainWindow>();
             services.AddTransient<MainViewModel>();
