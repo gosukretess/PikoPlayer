@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
-using Microsoft.Extensions.Configuration;
 
 namespace PikoPlayer.Config
 {
-    public static class ConfigurationExtensions
+    public static class ConfigurationSaveSystem
     {
-        public static void Change(this IConfiguration configuration , string key, string value)
+        public static void Change(string key, object value)
         {
             var configJson = File.ReadAllText("config.json");
             var config = JsonSerializer.Deserialize<Dictionary<string, object>>(configJson);

@@ -3,6 +3,7 @@ using System.IO;
 using System.Windows;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using PikoPlayer.Config;
 using PikoPlayer.Themes;
 using PikoPlayer.ViewModels;
 
@@ -37,6 +38,8 @@ namespace PikoPlayer
             var services = new ServiceCollection();
 
             services.AddSingleton(Configuration);
+            services.Configure<PositionSettings>(Configuration.GetSection(PositionSettings.SectionName));
+
             services.AddSingleton<IThemesRepository, ThemesRepository>();
 
             services.AddTransient<MainWindow>();

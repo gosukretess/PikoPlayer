@@ -6,6 +6,7 @@ using System.Text.Json;
 using System.Windows;
 using System.Windows.Input;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
 using PikoPlayer.Config;
@@ -17,6 +18,7 @@ namespace PikoPlayer.ViewModels
     public class MainViewModel : ObservableObject
     {
         private readonly IConfiguration _configuration;
+        private readonly IOptions<ThemeSettings> _themeSettings;
         private readonly IThemesRepository _themesRepository;
         private readonly PlaybackControlUtil _playbackControlUtil = new PlaybackControlUtil();
 
@@ -42,7 +44,7 @@ namespace PikoPlayer.ViewModels
 
         public void ChangeTheme(string themeName)
         {
-            _configuration.Change("Theme", themeName);
+            ConfigurationSaveSystem.Change("Theme", themeName);
             ActiveTheme = _themesRepository.GetThemeByName(themeName);
             foreach (var themeListItem in ThemesList)
             {
