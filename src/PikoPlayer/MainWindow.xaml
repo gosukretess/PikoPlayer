@@ -7,7 +7,6 @@
         Background="{Binding ActiveTheme.BackgroundColor, Mode=TwoWay}"
         WindowStyle="None"
         AllowsTransparency="True"
-        PreviewMouseWheel="Window_ScrollEvent" MouseDown="Window_MoveEvent"
         Title="PikoPlayer" 
         Height="{Binding Dimensions.WindowHeight, Mode=TwoWay}" 
         Width="{Binding Dimensions.WindowWidth, Mode=TwoWay}" >

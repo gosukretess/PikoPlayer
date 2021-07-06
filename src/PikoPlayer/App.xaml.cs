@@ -12,7 +12,6 @@ namespace PikoPlayer
     public partial class App : Application
     {
         public IServiceProvider ServiceProvider { get; private set; }
-
         public IConfiguration Configuration { get; private set; }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -24,13 +23,12 @@ namespace PikoPlayer
             mainWindow.Show();
         }
 
-        private IConfiguration BuildConfiguration()
+        private static IConfiguration BuildConfiguration()
         {
-            var builder = new ConfigurationBuilder()
+            return new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("config.json", optional: false, reloadOnChange: true);
-
-            return builder.Build();
+                .AddJsonFile("config.json", optional: false, reloadOnChange: true)
+                .Build();
         }
 
         private IServiceProvider ConfigureServices()

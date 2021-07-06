@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
@@ -82,6 +83,11 @@ namespace PikoPlayer.ViewModels
                     Checked = ActiveTheme.Name == x,
                     ChangeThemeCommand = new RelayCommand(() => ChangeTheme(x))
                 }));
+        }
+
+        public void OnWindowClosing(object sender, CancelEventArgs e)
+        {
+            ConfigurationSaveSystem.Change("Scale", Dimensions.Scale);
         }
     }
 }
