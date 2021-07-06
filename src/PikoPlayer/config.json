@@ -1,3 +1,8 @@
 ﻿{
-  "Theme": "bluesky"
+  "Theme": "bluesky",
+  "Scale": "1", 
+  "Position": {
+    "X": 100,
+    "Y": 100 
+  } 
 }
