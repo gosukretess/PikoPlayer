@@ -16,25 +16,17 @@ namespace PikoPlayer.ViewModels
 {
     public class MainViewModel : ObservableObject
     {
-        private readonly IConfiguration _configuration;
         private readonly IThemesRepository _themesRepository;
-        private readonly PlaybackControlUtil _playbackControlUtil = new PlaybackControlUtil();
+        private readonly PlaybackControlUtil _playbackControlUtil;
 
-        public ICommand ControlPlayback => new RelayCommand<ControlAction>(action => _playbackControlUtil.ControlPlayback(action));
-        public ICommand ScaleCommand => new RelayCommand<string>(direction =>
-        {
-            switch (direction)
-            {
-                case "Up":
-                    Dimensions.Scale += 0.05;
-                    break;
-                case "Down":
-                    Dimensions.Scale -= 0.05;
-                    break;
-            }
-            
-        });
+        public ICommand ControlPlaybackCommand => new RelayCommand<ControlAction>(action => _playbackControlUtil.ControlPlayback(action));
         public ICommand CloseCommand => new RelayCommand(() => Application.Current.Shutdown());
+        public ICommand ResetPositionCommand => new RelayCommand(() =>
+        {
+            Position.X = 100;
+            Position.Y = 100;
+        });
+
         public ObservableCollection<ThemeListItem> ThemesList { get; set; }
 
         private Theme _activeTheme;
@@ -51,14 +43,28 @@ namespace PikoPlayer.ViewModels
             set => SetProperty(ref _dimensions, value);
         }
 
-        public MainViewModel(IThemesRepository themesRepository, IConfiguration configuration)
+        private Position _position;
+        public Position Position
         {
-            _configuration = configuration;
+            get => _position;
+            set => SetProperty(ref _position, value);
+        }
+
+        public MainViewModel(IThemesRepository themesRepository, IConfiguration configuration, PlaybackControlUtil playbackControlUtil)
+        {
             _themesRepository = themesRepository;
-            ActiveTheme = _themesRepository.GetThemeByName(_configuration["Theme"]);
+            _playbackControlUtil = playbackControlUtil;
+            Position = new Position
+            {
+                X = Convert.ToDouble(configuration["Position:X"]),
+                Y = Convert.ToDouble(configuration["Position:Y"])
+
+            };
+
+            ActiveTheme = _themesRepository.GetThemeByName(configuration["Theme"]);
             Dimensions = new Dimensions
             {
-                Scale = Convert.ToDouble(_configuration["Scale"], CultureInfo.InvariantCulture)
+                Scale = Convert.ToDouble(configuration["Scale"], CultureInfo.InvariantCulture)
             };
 
             PropagateThemesList(themesRepository);
@@ -88,6 +94,7 @@ namespace PikoPlayer.ViewModels
         public void OnWindowClosing(object sender, CancelEventArgs e)
         {
             ConfigurationSaveSystem.Change("Scale", Dimensions.Scale);
+            ConfigurationSaveSystem.Change("Position", Position);
         }
     }
 }
