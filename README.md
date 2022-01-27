@@ -1,10 +1,24 @@
 # PikoPlayer
-Always on top small bar to control music playback.
-It requires .NET 5 Desktop Runtime to run: https://dotnet.microsoft.com/download/dotnet/5.0
-Allows to play/pause/prev/next songs and change volume by using mouse wheel when pointer is over the bar.
-Click and hold mouse button over "=" sign on left side of the app to move it.
-Right click on "=" or taskbar icon shows context menu with 'Close' command.
-Set Scale to resize window.
+Always-on-top small bar to control music playback. It simulates media key button presses, so it is perfect substitution for keyboard lacking keys to control playback.
+
+It requires .NET 6 Desktop Runtime to run: [download](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-6.0.1-windows-x64-installer)
+
+Newest PikoPlayer version can be downloaded [here](https://github.com/gosukretess/PikoPlayer/releases)
+
+## Features
+
+### :musical_note: Control music playback using PikoPlayer's buttons :musical_note:
+![myfile](docs/control_playback.gif)
+
+### :sound: Adjust volume by hovering over PikoPlayer and scrolling mouse wheel :mute:
+![myfile](docs/adjust_volume.gif)
+
+### :signal_strength: Change size of the PikoPlayer :signal_strength:
+![myfile](docs/adjust_scale.gif)
+
+### :heart: Select your favourite theme! :yellow_heart:
+![myfile](docs/change_theme.gif)
+
 
 ## Available themes
 
@@ -27,6 +41,10 @@ Set Scale to resize window.
 | ![alt text](docs/AmazonForest.png "Amazon Forest")     | Amazon Forest |
 
 
+## Known issues
+
+### - PikoPlayer hiding under system taskbar
+Unfortunately Windows always brings taskbar at the first place, so you can't put PikoPlayer on top of it. In case it hides under Windows taskbar, right click PikoPlayer icon in system tray and select "Reset Position".
 
 
 ## Credits
