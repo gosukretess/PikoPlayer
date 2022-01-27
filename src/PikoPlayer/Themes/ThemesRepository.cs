@@ -18,7 +18,7 @@ namespace PikoPlayer.Themes
             foreach (var themePath in Directory.GetDirectories(themesDirectory))
             {
                 var themeName = themePath.Substring(themePath.LastIndexOf("\\", StringComparison.Ordinal) + 1);
-                var jsonString = File.ReadAllText(Path.Combine(themePath, "theme.json"));
+                 var jsonString = File.ReadAllText(Path.Combine(themePath, "theme.json"));
                 var theme = JsonSerializer.Deserialize<Theme>(jsonString);
                 theme.Name = themeName;
                 theme.Path = themePath;

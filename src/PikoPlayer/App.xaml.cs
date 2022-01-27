@@ -3,7 +3,6 @@ using System.IO;
 using System.Windows;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using PikoPlayer.Config;
 using PikoPlayer.Controls;
 using PikoPlayer.Themes;
 using PikoPlayer.ViewModels;
