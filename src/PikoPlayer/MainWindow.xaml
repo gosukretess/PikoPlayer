@@ -10,9 +10,10 @@
         Title="PikoPlayer" 
         Height="{Binding Dimensions.WindowHeight, Mode=TwoWay}" 
         Width="{Binding Dimensions.WindowWidth, Mode=TwoWay}" 
-        Top="{Binding Position.X, Mode=TwoWay}" Left="{Binding Position.Y, Mode=TwoWay}">
+        Top="{Binding Position.X, Mode=TwoWay}" Left="{Binding Position.Y, Mode=TwoWay}"
+        ResizeMode="NoResize">
     <Window.Resources>
-        <ContextMenu x:Key="MainContextMenu">
+        <ContextMenu x:Key="MainContextMenu" x:Shared="false" Placement="MousePoint">
             <MenuItem Header="Reset Position" Command="{Binding ResetPositionCommand}" />
             <MenuItem Header="Scale">
                 <MenuItem>
@@ -81,7 +82,7 @@
     </Window.Resources>
     <StackPanel Orientation="Horizontal" Margin="{Binding Dimensions.WindowMargin}">
         <tb:TaskbarIcon x:Name="NotificationIcon" Visibility="Visible"
-                        IconSource="../Resources/Icons/taskbar.ico" ToolTipText="Pikoplayer"
+                        IconSource="../Resources/Icons/taskbar.ico" ToolTipText="PikoPlayer"
                         ContextMenu="{StaticResource MainContextMenu}" />
 
         <TextBlock Text="=" Foreground="{Binding ActiveTheme.ForegroundColor}" FontSize="{Binding Dimensions.HamburgerSize}"
