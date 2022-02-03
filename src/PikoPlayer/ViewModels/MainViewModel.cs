@@ -18,6 +18,7 @@ namespace PikoPlayer.ViewModels
     {
         private readonly IThemesRepository _themesRepository;
         private readonly PlaybackControlUtil _playbackControlUtil;
+        private readonly RunOnStartupSetter _runOnStartupSetter;
 
         public ICommand ControlPlaybackCommand => new RelayCommand<ControlAction>(action => _playbackControlUtil.ControlPlayback(action));
         public ICommand CloseCommand => new RelayCommand(() => Application.Current.Shutdown());
@@ -26,6 +27,23 @@ namespace PikoPlayer.ViewModels
             Position.X = 100;
             Position.Y = 100;
         });
+
+        public ICommand RunOnStartupCommand => new RelayCommand(() =>
+        {
+            if (RunOnStartup == true)
+            {
+                // disable
+                _runOnStartupSetter.RemoveFromStartup();
+                RunOnStartup = false;
+            }
+            else
+            {
+                // enable
+                _runOnStartupSetter.AddToStartup();
+                RunOnStartup = true;
+            }
+        });
+
 
         public ObservableCollection<ThemeListItem> ThemesList { get; set; }
 
@@ -48,19 +66,28 @@ namespace PikoPlayer.ViewModels
         {
             get => _position;
             set => SetProperty(ref _position, value);
+        } 
+        
+        private bool _runOnStartup;
+        public bool RunOnStartup
+        {
+            get => _runOnStartup;
+            set => SetProperty(ref _runOnStartup, value);
         }
 
-        public MainViewModel(IThemesRepository themesRepository, IConfiguration configuration, PlaybackControlUtil playbackControlUtil)
+        public MainViewModel(IThemesRepository themesRepository, IConfiguration configuration, 
+            PlaybackControlUtil playbackControlUtil, RunOnStartupSetter runOnStartupSetter)
         {
             _themesRepository = themesRepository;
             _playbackControlUtil = playbackControlUtil;
+            _runOnStartupSetter = runOnStartupSetter;
             Position = new Position
             {
                 X = Convert.ToDouble(configuration["Position:X"]),
                 Y = Convert.ToDouble(configuration["Position:Y"])
 
             };
-
+            RunOnStartup = _runOnStartupSetter.IsInStartup();
             ActiveTheme = _themesRepository.GetThemeByName(configuration["Theme"]);
             Dimensions = new Dimensions
             {

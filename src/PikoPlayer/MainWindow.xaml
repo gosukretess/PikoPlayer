@@ -47,6 +47,9 @@
                     </Style>
                 </MenuItem.ItemContainerStyle>
             </MenuItem>
+            <MenuItem Header="Settings">
+                <MenuItem IsChecked="{Binding RunOnStartup}" Header="Run on startup" Command="{Binding RunOnStartupCommand}" />
+            </MenuItem>
             <MenuItem Header="Close" Command="{Binding CloseCommand}" />
         </ContextMenu>
 

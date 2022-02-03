@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Windows;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +15,9 @@ namespace PikoPlayer
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            base.OnStartup(e);
+            ShutdownMode = ShutdownMode.OnMainWindowClose;
+
             Configuration = BuildConfiguration();
             ServiceProvider = ConfigureServices();
             
@@ -26,7 +28,7 @@ namespace PikoPlayer
         private static IConfiguration BuildConfiguration()
         {
             return new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
+                .SetBasePath(AppContext.BaseDirectory)
                 .AddJsonFile("config.json", optional: false, reloadOnChange: true)
                 .Build();
         }
@@ -39,6 +41,7 @@ namespace PikoPlayer
 
             services.AddSingleton<IThemesRepository, ThemesRepository>();
             services.AddSingleton<PlaybackControlUtil>();
+            services.AddSingleton<RunOnStartupSetter>();
 
             services.AddTransient<MainWindow>();
             services.AddTransient<MainViewModel>();
