@@ -1,17 +1,14 @@
-﻿<Window x:Class="PikoPlayer.MainWindow"
+﻿<Window x:Class="PikoPlayer.Player.PlayerView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:tb="http://www.hardcodet.net/taskbar"
         xmlns:controls="clr-namespace:PikoPlayer.Controls"
-        Topmost="True"
+        Title="PikoPlayer" ResizeMode="NoResize" ShowInTaskbar="False"
+        Topmost="True" WindowStyle="None" AllowsTransparency="True"
         Background="{Binding ActiveTheme.BackgroundColor, Mode=TwoWay}"
-        WindowStyle="None"
-        AllowsTransparency="True"
-        Title="PikoPlayer" 
         Height="{Binding Dimensions.WindowHeight, Mode=TwoWay}" 
         Width="{Binding Dimensions.WindowWidth, Mode=TwoWay}" 
-        Top="{Binding Position.X, Mode=TwoWay}" Left="{Binding Position.Y, Mode=TwoWay}"
-        ResizeMode="NoResize">
+        Top="{Binding Position.X, Mode=TwoWay}" Left="{Binding Position.Y, Mode=TwoWay}">
     <Window.Resources>
         <ContextMenu x:Key="MainContextMenu" x:Shared="false" Placement="MousePoint">
             <MenuItem Header="Reset Position" Command="{Binding ResetPositionCommand}" />
@@ -83,6 +80,7 @@
             </Setter>
         </Style>
     </Window.Resources>
+
     <StackPanel Orientation="Horizontal" Margin="{Binding Dimensions.WindowMargin}">
         <tb:TaskbarIcon x:Name="NotificationIcon" Visibility="Visible"
                         IconSource="../Resources/Icons/taskbar.ico" ToolTipText="PikoPlayer"
@@ -92,15 +90,15 @@
                    Width="{Binding Dimensions.ButtonWidth}" Height="{Binding Dimensions.ButtonHeight}"
                      HorizontalAlignment="Center" VerticalAlignment="Center" ContextMenu="{StaticResource MainContextMenu}" />
 
-        <Button Command="{Binding ControlPlaybackCommand}" CommandParameter="{x:Static controls:ControlAction.Prev}"
+        <Button Command="{Binding ControlPlaybackCommand}" CommandParameter="{x:Static controls:PlaybackControlAction.Prev}"
                 Style="{StaticResource PlaybackButton}">
             <Image Source="{Binding ActiveTheme.Prev}" />
         </Button>
-        <Button Command="{Binding ControlPlaybackCommand}" CommandParameter="{x:Static controls:ControlAction.Play}"
+        <Button Command="{Binding ControlPlaybackCommand}" CommandParameter="{x:Static controls:PlaybackControlAction.Play}"
                 Style="{StaticResource PlaybackButton}" Margin="{Binding Dimensions.CentralButtonMargin}">
             <Image Source="{Binding ActiveTheme.Play}" />
         </Button>
-        <Button Command="{Binding ControlPlaybackCommand}" CommandParameter="{x:Static controls:ControlAction.Next}"
+        <Button Command="{Binding ControlPlaybackCommand}" CommandParameter="{x:Static controls:PlaybackControlAction.Next}"
                 Style="{StaticResource PlaybackButton}">
             <Image Source="{Binding ActiveTheme.Next}" />
         </Button>

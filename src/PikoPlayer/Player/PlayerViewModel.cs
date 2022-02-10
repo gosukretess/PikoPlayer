@@ -6,21 +6,22 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
 using PikoPlayer.Config;
 using PikoPlayer.Controls;
+using PikoPlayer.Player.Models;
 using PikoPlayer.Themes;
+using WPF.Core;
 
-namespace PikoPlayer.ViewModels
+namespace PikoPlayer.Player
 {
-    public class MainViewModel : ObservableObject
+    public class PlayerViewModel : ViewModel
     {
         private readonly IThemesRepository _themesRepository;
-        private readonly PlaybackControlUtil _playbackControlUtil;
-        private readonly RunOnStartupSetter _runOnStartupSetter;
+        private readonly PlaybackControl _playbackControl;
+        private readonly RunOnStartupControl _runOnStartupControl;
 
-        public ICommand ControlPlaybackCommand => new RelayCommand<ControlAction>(action => _playbackControlUtil.ControlPlayback(action));
+        public ICommand ControlPlaybackCommand => new RelayCommand<PlaybackControlAction>(action => _playbackControl.ControlPlayback(action));
         public ICommand CloseCommand => new RelayCommand(() => Application.Current.Shutdown());
         public ICommand ResetPositionCommand => new RelayCommand(() =>
         {
@@ -30,17 +31,15 @@ namespace PikoPlayer.ViewModels
 
         public ICommand RunOnStartupCommand => new RelayCommand(() =>
         {
-            if (RunOnStartup == true)
+            if (RunOnStartup)
             {
-                // disable
-                _runOnStartupSetter.RemoveFromStartup();
-                RunOnStartup = false;
+                var success = _runOnStartupControl.RemoveFromStartup();
+                if (success) RunOnStartup = false;
             }
             else
             {
-                // enable
-                _runOnStartupSetter.AddToStartup();
-                RunOnStartup = true;
+                var success = _runOnStartupControl.AddToStartup();
+                if (success) RunOnStartup = true;
             }
         });
 
@@ -66,8 +65,8 @@ namespace PikoPlayer.ViewModels
         {
             get => _position;
             set => SetProperty(ref _position, value);
-        } 
-        
+        }
+
         private bool _runOnStartup;
         public bool RunOnStartup
         {
@@ -75,20 +74,20 @@ namespace PikoPlayer.ViewModels
             set => SetProperty(ref _runOnStartup, value);
         }
 
-        public MainViewModel(IThemesRepository themesRepository, IConfiguration configuration, 
-            PlaybackControlUtil playbackControlUtil, RunOnStartupSetter runOnStartupSetter)
+        public PlayerViewModel(IThemesRepository themesRepository, IConfiguration configuration,
+            PlaybackControl playbackControl, RunOnStartupControl runOnStartupControl)
         {
             _themesRepository = themesRepository;
-            _playbackControlUtil = playbackControlUtil;
-            _runOnStartupSetter = runOnStartupSetter;
+            _playbackControl = playbackControl;
+            _runOnStartupControl = runOnStartupControl;
             Position = new Position
             {
                 X = Convert.ToDouble(configuration["Position:X"]),
                 Y = Convert.ToDouble(configuration["Position:Y"])
 
             };
-            RunOnStartup = _runOnStartupSetter.IsInStartup();
-            ActiveTheme = _themesRepository.GetThemeByName(configuration["Theme"]);
+            RunOnStartup = _runOnStartupControl.IsInStartup();
+            ActiveTheme = _themesRepository.Get(configuration["Theme"]);
             Dimensions = new Dimensions
             {
                 Scale = Convert.ToDouble(configuration["Scale"], CultureInfo.InvariantCulture)
@@ -100,7 +99,7 @@ namespace PikoPlayer.ViewModels
         public void ChangeTheme(string themeName)
         {
             ConfigurationSaveSystem.Change("Theme", themeName);
-            ActiveTheme = _themesRepository.GetThemeByName(themeName);
+            ActiveTheme = _themesRepository.Get(themeName);
             foreach (var themeListItem in ThemesList)
             {
                 themeListItem.Checked = themeListItem.Name.Equals(themeName);
@@ -109,7 +108,7 @@ namespace PikoPlayer.ViewModels
 
         private void PropagateThemesList(IThemesRepository themesRepository)
         {
-            ThemesList = new ObservableCollection<ThemeListItem>(themesRepository.GetThemesList().Select(x =>
+            ThemesList = new ObservableCollection<ThemeListItem>(themesRepository.GetThemesNames().Select(x =>
                 new ThemeListItem
                 {
                     Name = x,

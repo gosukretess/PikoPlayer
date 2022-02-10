@@ -2,7 +2,7 @@
 using System.Windows;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 
-namespace PikoPlayer.ViewModels
+namespace PikoPlayer.Player.Models
 {
     public class Dimensions : ObservableObject
     {

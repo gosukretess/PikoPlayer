@@ -8,16 +8,18 @@ namespace PikoPlayer.Themes
 {
     public class ThemesRepository : IThemesRepository
     {
-        private readonly IDictionary<string, Theme> _themes = new Dictionary<string, Theme>();
-        public Theme ActiveTheme { get; set; }
+        private readonly Dictionary<string, Theme> _themes = new Dictionary<string, Theme>();
 
         public ThemesRepository()
         {
             var themesDirectory = Path.Combine(AppContext.BaseDirectory, "Resources", "Themes");
             foreach (var themePath in Directory.GetDirectories(themesDirectory))
             {
+                var themeJsonPath = Path.Combine(themePath, "theme.json");
+                if (!File.Exists(themeJsonPath)) continue;
+
                 var themeName = themePath.Substring(themePath.LastIndexOf("\\", StringComparison.Ordinal) + 1);
-                 var jsonString = File.ReadAllText(Path.Combine(themePath, "theme.json"));
+                var jsonString = File.ReadAllText(themeJsonPath);
                 var theme = JsonSerializer.Deserialize<Theme>(jsonString);
                 theme.Name = themeName;
                 theme.Path = themePath;
@@ -25,19 +27,19 @@ namespace PikoPlayer.Themes
             }
         }
 
-        public Theme GetThemeByName(string name)
+        public Theme Get(string name)
         {
             return _themes.FirstOrDefault(t => t.Key == name).Value;
         }
 
-        public IEnumerable<string> GetThemesList()
+        public IEnumerable<string> GetThemesNames()
         {
             return _themes.Keys;
         }
     }
     public interface IThemesRepository
     {
-        IEnumerable<string> GetThemesList();
-        Theme GetThemeByName(string name);
+        IEnumerable<string> GetThemesNames();
+        Theme Get(string name);
     }
 }
