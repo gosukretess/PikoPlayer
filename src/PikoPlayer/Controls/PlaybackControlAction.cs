@@ -1,6 +1,6 @@
 ﻿namespace PikoPlayer.Controls
 {
-    public enum ControlAction
+    public enum PlaybackControlAction
     {
         Prev,
         Play,

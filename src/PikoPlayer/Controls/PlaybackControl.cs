@@ -3,26 +3,26 @@ using WindowsInput.Native;
 
 namespace PikoPlayer.Controls
 {
-    public class PlaybackControlUtil
+    public class PlaybackControl
     {
         private readonly InputSimulator _inputSimulator;
 
-        public PlaybackControlUtil()
+        public PlaybackControl()
         {
             _inputSimulator = new InputSimulator();
         }
 
-        public void ControlPlayback(ControlAction action)
+        public void ControlPlayback(PlaybackControlAction action)
         {
             switch (action)
             {
-                case ControlAction.Prev:
+                case PlaybackControlAction.Prev:
                     _inputSimulator.Keyboard.KeyDown(VirtualKeyCode.MEDIA_PREV_TRACK);
                     break;
-                case ControlAction.Play:
+                case PlaybackControlAction.Play:
                     _inputSimulator.Keyboard.KeyDown(VirtualKeyCode.MEDIA_PLAY_PAUSE);
                     break;
-                case ControlAction.Next:
+                case PlaybackControlAction.Next:
                     _inputSimulator.Keyboard.KeyDown(VirtualKeyCode.MEDIA_NEXT_TRACK);
                     break;
             }

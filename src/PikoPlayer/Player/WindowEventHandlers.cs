@@ -2,25 +2,25 @@
 using System.Windows.Input;
 using PikoPlayer.Controls;
 
-namespace PikoPlayer.ViewModels
+namespace PikoPlayer.Player
 {
     public class WindowEventHandlers
     {
         private readonly Window _window;
-        private readonly VolumeControlUtil _volumeController;
+        private readonly VolumeControl _volumeController;
 
         public WindowEventHandlers(Window window)
         {
             _window = window;
-            _volumeController = new VolumeControlUtil(window);
+            _volumeController = new VolumeControl(window);
         }
 
         public void OnMouseScroll(object sender, MouseWheelEventArgs e)
         {
             if (e.Delta > 0)
-                _volumeController.VolUp();
+                _volumeController.VolumeUp();
             else if (e.Delta < 0)
-                _volumeController.VolDown();
+                _volumeController.VolumeDown();
         }
 
         public void OnMouseDown(object sender, MouseButtonEventArgs e)

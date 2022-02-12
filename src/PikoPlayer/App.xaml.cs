@@ -1,49 +1,33 @@
-﻿using System;
-using System.IO;
-using System.Windows;
-using Microsoft.Extensions.Configuration;
+﻿using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Toolkit.Mvvm.DependencyInjection;
 using PikoPlayer.Controls;
+using PikoPlayer.Player;
 using PikoPlayer.Themes;
-using PikoPlayer.ViewModels;
+using WPF.Core;
 
 namespace PikoPlayer
 {
     public partial class App : Application
     {
-        public IServiceProvider ServiceProvider { get; private set; }
-        public IConfiguration Configuration { get; private set; }
-
         protected override void OnStartup(StartupEventArgs e)
         {
-            Configuration = BuildConfiguration();
-            ServiceProvider = ConfigureServices();
-            
-            var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
-            mainWindow.Show();
-        }
+            base.OnStartup(e);
 
-        private static IConfiguration BuildConfiguration()
-        {
-            return new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("config.json", optional: false, reloadOnChange: true)
+            new ServiceCollectionBuilder()
+                .AddMainWindow<PlayerView>()
+                .ConfigureServices(services =>
+                {
+                    services.AddSingleton<IThemesRepository, ThemesRepository>();
+                    services.AddSingleton<PlaybackControl>();
+                    services.AddSingleton<RunOnStartupControl>();
+                })
+                .AddConfiguration("config.json")
+                .AddViewModels()
                 .Build();
-        }
-
-        private IServiceProvider ConfigureServices()
-        {
-            var services = new ServiceCollection();
-
-            services.AddSingleton(Configuration);
-
-            services.AddSingleton<IThemesRepository, ThemesRepository>();
-            services.AddSingleton<PlaybackControlUtil>();
-
-            services.AddTransient<MainWindow>();
-            services.AddTransient<MainViewModel>();
-
-            return services.BuildServiceProvider();
+            
+            ShutdownMode = ShutdownMode.OnMainWindowClose;
+            Ioc.Default.GetRequiredService<PlayerView>().Show();
         }
     }
 }

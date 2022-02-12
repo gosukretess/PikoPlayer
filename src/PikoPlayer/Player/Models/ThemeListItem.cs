@@ -1,7 +1,7 @@
 ﻿using System.Windows.Input;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 
-namespace PikoPlayer.Themes
+namespace PikoPlayer.Player.Models
 {
     public class ThemeListItem : ObservableObject
     {

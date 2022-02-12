@@ -1,13 +1,12 @@
 # PikoPlayer
-Always-on-top small bar to control music playback. It simulates media key button presses, so it is perfect substitution for keyboard lacking keys to control playback.
+Always-on-top small bar to control music playback. It simulates media key button presses, so it is perfect substitution for keyboard lacking special keys to control playback.
 
-It requires .NET 6 Desktop Runtime to run: [download](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-6.0.1-windows-x64-installer)
+:arrow_down: Newest PikoPlayer version can be downloaded [here](https://github.com/gosukretess/PikoPlayer/releases/tag/0.4)
 
-Newest PikoPlayer version can be downloaded [here](https://github.com/gosukretess/PikoPlayer/releases)
 
 ## Features
 
-### :musical_note: Control music playback using PikoPlayer's buttons :musical_note:
+### :musical_note: Control music playback using PikoPlayer's buttons :notes:
 ![myfile](docs/control_playback.gif)
 
 ### :sound: Adjust volume by hovering over PikoPlayer and scrolling mouse wheel :mute:
@@ -43,9 +42,11 @@ Newest PikoPlayer version can be downloaded [here](https://github.com/gosukretes
 
 ## Known issues
 
+### - PikoPlayer is not starting
+If you are using Windows version prior to 8.1, or early build of Windows 10 you might be missing .NET Framework 4.8. Try installing .NET Runtime fromt [this link](https://dotnet.microsoft.com/en-us/download/dotnet-framework/net48).
+
 ### - PikoPlayer hiding under system taskbar
 Unfortunately Windows always brings taskbar at the first place, so you can't put PikoPlayer on top of it. In case it hides under Windows taskbar, right click PikoPlayer icon in system tray and select "Reset Position".
-
 
 ## Credits
 
